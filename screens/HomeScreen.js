@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 20,
+        marginBottom: 40,
     },
     loadMoreText: {
         fontSize: 16,

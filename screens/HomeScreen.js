@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, BackHandler } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fetchPosts } from '../services/api';
 import PostCard from '../components/PostCard';
 import { AntDesign } from '@expo/vector-icons';
+import NetInfo from '@react-native-community/netinfo';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -13,6 +14,46 @@ const HomeScreen = () => {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [isConnected, setIsConnected] = useState(true); // Check internet connectivity
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(state.isConnected);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        if (!isConnected) {
+            Alert.alert(
+                'No Internet Connection',
+                'Please check your internet connection and try again.',
+                [
+                    {
+                        text: 'Close App',
+                        onPress: () => {
+                            Alert.alert('App Closed', 'The app will now close.', [
+                                {
+                                    text: 'OK',
+                                    onPress: () => BackHandler.exitApp(),
+                                    style: 'destructive',
+                                },
+                            ]);
+                        },
+                    },
+                    {
+                        text: 'Try Again',
+                        onPress: () => {
+                            navigation.navigate('Home', { key: Math.random() }); // Reload the screen by passing a new key
+                        },
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false }
+            );
+        }
+    }, [isConnected, navigation]);
 
     useEffect(() => {
         const loadPosts = async () => {
@@ -35,8 +76,10 @@ const HomeScreen = () => {
                 setLoading(false);
             }
         };
-        loadPosts();
-    }, [page]);
+        if (isConnected) {
+            loadPosts();
+        }
+    }, [page, isConnected]);
 
     useEffect(() => {
         if (selectedCategory) {
@@ -68,13 +111,12 @@ const HomeScreen = () => {
         const match = regex.exec(contentEncoded);
         return match && match.length >= 2 ? match[1] : null;
     };
-    
 
     return (
         <View style={styles.container}>
             {/* Post List */}
             <ScrollView style={styles.scrollView}>
-                {filteredPosts.map((post, index) => (
+                {isConnected && filteredPosts.map((post, index) => (
                     <PostCard
                         key={index}
                         title={post.title}
@@ -82,7 +124,7 @@ const HomeScreen = () => {
                         imageUrl={post.imageUrl}
                     />
                 ))}
-                {hasMore && (
+                {hasMore && isConnected && (
                     <TouchableOpacity style={styles.loadMoreButton} onPress={handleLoadMore} disabled={loading}>
                         {loading ? (
                             <ActivityIndicator size="small" color="#fff" />

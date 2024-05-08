@@ -62,6 +62,7 @@ const PostCard = ({ title, content, linkUrl }) => {
                             source={{ html: resizedContent || '' }}
                             contentWidth={windowWidth}
                             ignoredDomTags={['video']}
+                            tagsStyles={{ p: { fontSize: 16 } }} // Set font size for paragraphs
                         />
                         {linkUrl && (
                             <TouchableOpacity onPress={handleLinkPress} style={styles.linkButton}>
@@ -74,8 +75,6 @@ const PostCard = ({ title, content, linkUrl }) => {
         </View>
     );
 };
-
-
 
 const styles = StyleSheet.create({
     card: {
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
     scrollView: {
         flexGrow: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        paddingHorizontal: 10,
     },
     linkButton: {
         marginTop: 10,

@@ -1,35 +1,23 @@
 {
   "expo": {
     "name": "Ects Ecosystem",
-    "slug": "EctsEcosystem",
-    "version": "2.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "slug": "expo-template-bare",
+    "version": "1.0.0",
+    "sdkVersion": "51.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
+    "icon": "./assets/icon.png",
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.gmail.ectscmp.ecosystem"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "ios": {
+      "bundleIdentifier": "com.gmail.ectscmp.ecosystem",
+      "buildNumber": "12"
     },
     "extra": {
       "eas": {
-        "projectId": "b8580dcc-4102-431e-9c92-5e4bbc23cbc1"
+        "projectId": "79109f30-588a-4b00-a03e-a9ccc8b019a2"
       }
     }
   }
